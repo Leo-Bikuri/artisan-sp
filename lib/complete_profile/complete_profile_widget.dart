@@ -187,8 +187,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     .bodyText1
                                     .override(
                                       fontFamily: 'Lexend Deca',
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiaryColor,
+                                      color: Color(0xFF696969),
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -261,8 +260,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     .bodyText1
                                     .override(
                                       fontFamily: 'Lexend Deca',
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiaryColor,
+                                      color: Color(0xFF696969),
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -331,8 +329,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     .bodyText1
                                     .override(
                                       fontFamily: 'Lexend Deca',
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiaryColor,
+                                      color: Color(0xFF696969),
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -401,8 +398,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     .bodyText1
                                     .override(
                                       fontFamily: 'Lexend Deca',
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiaryColor,
+                                      color: Color(0xFF696969),
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -479,9 +475,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                             .bodyText1
                                             .override(
                                               fontFamily: 'Lexend Deca',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .tertiaryColor,
+                                              color: Color(0xFF696969),
                                               fontSize: 14,
                                               fontWeight: FontWeight.normal,
                                             ),
@@ -566,8 +560,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                           .bodyText1
                                           .override(
                                             fontFamily: 'Lexend Deca',
-                                            color: FlutterFlowTheme.of(context)
-                                                .tertiaryColor,
+                                            color: Color(0xFF696969),
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -641,8 +634,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                           .bodyText1
                                           .override(
                                             fontFamily: 'Lexend Deca',
-                                            color: FlutterFlowTheme.of(context)
-                                                .tertiaryColor,
+                                            color: Color(0xFF696969),
                                             fontSize: 14,
                                             fontWeight: FontWeight.normal,
                                           ),
@@ -727,8 +719,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     .bodyText1
                                     .override(
                                       fontFamily: 'Lexend Deca',
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiaryColor,
+                                      color: Color(0xFF696969),
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -786,8 +777,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     .bodyText1
                                     .override(
                                       fontFamily: 'Lexend Deca',
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiaryColor,
+                                      color: Color(0xFF696969),
                                       fontSize: 14,
                                       fontWeight: FontWeight.normal,
                                     ),
@@ -853,7 +843,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                   .override(
                                     fontFamily: 'Lexend Deca',
                                     color: FlutterFlowTheme.of(context)
-                                        .tertiaryColor,
+                                        .primaryText,
                                   ),
                               hintText: 'Please select skill...',
                               fillColor: Colors.white,
@@ -894,7 +884,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     .subtitle2
                                     .override(
                                       fontFamily: 'Lexend Deca',
-                                      color: Color(0xFFF54748),
+                                      color: Color(0xFF696969),
                                     ),
                                 borderSide: BorderSide(
                                   color: Colors.transparent,
@@ -910,6 +900,19 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                             child: FFButtonWidget(
                               onPressed: () async {
                                 var _shouldSetState = false;
+                                if (formKey.currentState == null ||
+                                    !formKey.currentState.validate()) {
+                                  return;
+                                }
+
+                                if (uploadedFileUrl == null ||
+                                    uploadedFileUrl.isEmpty) {
+                                  return;
+                                }
+                                if (placePickerValue == FFPlace()) {
+                                  return;
+                                }
+
                                 response = await KycCall.call(
                                   id: idController.text,
                                   firstName: firstNameController.text,
@@ -922,7 +925,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                   gender: genderController.text,
                                 );
                                 _shouldSetState = true;
-                                if ((response?.succeeded ?? true)) {
+                                if (((response?.statusCode ?? 200)) == 200) {
                                   final serviceProvidersUpdateData =
                                       createServiceProvidersRecordData(
                                     photoUrl: uploadedFileUrl,

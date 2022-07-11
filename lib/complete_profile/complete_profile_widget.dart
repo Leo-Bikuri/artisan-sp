@@ -753,6 +753,21 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     fontWeight: FontWeight.normal,
                                   ),
                               keyboardType: TextInputType.name,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Field is required';
+                                }
+                                if (val.length < 1) {
+                                  return 'Requires at least 1 characters.';
+                                }
+                                if (val.length > 1) {
+                                  return 'Maximum 1 characters allowed, currently ${val.length}.';
+                                }
+                                if (!RegExp(r"(M|F)").hasMatch(val)) {
+                                  return 'Invalid text';
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           Padding(
@@ -821,7 +836,9 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                 if (val.length > 12) {
                                   return 'Maximum 12 characters allowed, currently ${val.length}.';
                                 }
-                                if (!RegExp(r"(M|F)").hasMatch(val)) {
+                                if (!RegExp(
+                                        r"^254(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$")
+                                    .hasMatch(val)) {
                                   return 'Invalid text';
                                 }
                                 return null;
@@ -902,6 +919,10 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                 var _shouldSetState = false;
                                 if (formKey.currentState == null ||
                                     !formKey.currentState.validate()) {
+                                  return;
+                                }
+
+                                if (dropDownValue == null) {
                                   return;
                                 }
 

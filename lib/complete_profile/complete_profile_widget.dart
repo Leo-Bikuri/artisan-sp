@@ -946,7 +946,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                   gender: genderController.text,
                                 );
                                 _shouldSetState = true;
-                                if (((response?.statusCode ?? 200)) == 200) {
+                                if (((response?.statusCode ?? 200)) == 403) {
                                   final serviceProvidersUpdateData =
                                       createServiceProvidersRecordData(
                                     photoUrl: uploadedFileUrl,

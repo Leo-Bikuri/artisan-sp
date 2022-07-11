@@ -109,6 +109,12 @@ class _$ServiceProvidersRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.rating;
+    if (value != null) {
+      result
+        ..add('rating')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
     value = object.reference;
     if (value != null) {
       result
@@ -180,6 +186,10 @@ class _$ServiceProvidersRecordSerializer
           result.gender = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'rating':
+          result.rating = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int;
+          break;
         case 'Document__Reference__Field':
           result.reference = serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -219,6 +229,8 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
   @override
   final String gender;
   @override
+  final int rating;
+  @override
   final DocumentReference<Object> reference;
 
   factory _$ServiceProvidersRecord(
@@ -238,6 +250,7 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
       this.identificationNumber,
       this.dob,
       this.gender,
+      this.rating,
       this.reference})
       : super._();
 
@@ -266,6 +279,7 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
         identificationNumber == other.identificationNumber &&
         dob == other.dob &&
         gender == other.gender &&
+        rating == other.rating &&
         reference == other.reference;
   }
 
@@ -282,18 +296,20 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
                                     $jc(
                                         $jc(
                                             $jc(
-                                                $jc($jc(0, email.hashCode),
-                                                    password.hashCode),
-                                                photoUrl.hashCode),
-                                            createdTime.hashCode),
-                                        phoneNumber.hashCode),
-                                    uid.hashCode),
-                                location.hashCode),
-                            skill.hashCode),
-                        displayName.hashCode),
-                    identificationNumber.hashCode),
-                dob.hashCode),
-            gender.hashCode),
+                                                $jc(
+                                                    $jc($jc(0, email.hashCode),
+                                                        password.hashCode),
+                                                    photoUrl.hashCode),
+                                                createdTime.hashCode),
+                                            phoneNumber.hashCode),
+                                        uid.hashCode),
+                                    location.hashCode),
+                                skill.hashCode),
+                            displayName.hashCode),
+                        identificationNumber.hashCode),
+                    dob.hashCode),
+                gender.hashCode),
+            rating.hashCode),
         reference.hashCode));
   }
 
@@ -312,6 +328,7 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
           ..add('identificationNumber', identificationNumber)
           ..add('dob', dob)
           ..add('gender', gender)
+          ..add('rating', rating)
           ..add('reference', reference))
         .toString();
   }
@@ -370,6 +387,10 @@ class ServiceProvidersRecordBuilder
   String get gender => _$this._gender;
   set gender(String gender) => _$this._gender = gender;
 
+  int _rating;
+  int get rating => _$this._rating;
+  set rating(int rating) => _$this._rating = rating;
+
   DocumentReference<Object> _reference;
   DocumentReference<Object> get reference => _$this._reference;
   set reference(DocumentReference<Object> reference) =>
@@ -394,6 +415,7 @@ class ServiceProvidersRecordBuilder
       _identificationNumber = $v.identificationNumber;
       _dob = $v.dob;
       _gender = $v.gender;
+      _rating = $v.rating;
       _reference = $v.reference;
       _$v = null;
     }
@@ -427,6 +449,7 @@ class ServiceProvidersRecordBuilder
             identificationNumber: identificationNumber,
             dob: dob,
             gender: gender,
+            rating: rating,
             reference: reference);
     replace(_$result);
     return _$result;

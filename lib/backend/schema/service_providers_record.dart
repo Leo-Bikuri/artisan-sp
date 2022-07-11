@@ -53,6 +53,9 @@ abstract class ServiceProvidersRecord
   String get gender;
 
   @nullable
+  int get rating;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -67,7 +70,8 @@ abstract class ServiceProvidersRecord
         ..displayName = ''
         ..identificationNumber = ''
         ..dob = ''
-        ..gender = '';
+        ..gender = ''
+        ..rating = 0;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('service-providers');
@@ -105,6 +109,7 @@ Map<String, dynamic> createServiceProvidersRecordData({
   String identificationNumber,
   String dob,
   String gender,
+  int rating,
 }) =>
     serializers.toFirestore(
         ServiceProvidersRecord.serializer,
@@ -120,4 +125,5 @@ Map<String, dynamic> createServiceProvidersRecordData({
           ..displayName = displayName
           ..identificationNumber = identificationNumber
           ..dob = dob
-          ..gender = gender));
+          ..gender = gender
+          ..rating = rating));

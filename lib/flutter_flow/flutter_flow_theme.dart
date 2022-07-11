@@ -19,6 +19,12 @@ abstract class FlutterFlowTheme {
 
   Color primaryBtnText;
   Color lineColor;
+  Color grayIcon;
+  Color gray200;
+  Color gray600;
+  Color black600;
+  Color tertiary400;
+  Color textColor;
 
   String get title1Family => typography.title1Family;
   TextStyle get title1 => typography.title1;
@@ -50,6 +56,12 @@ class LightModeTheme extends FlutterFlowTheme {
 
   Color primaryBtnText = Color(0xFFFFFFFF);
   Color lineColor = Color(0xFFE0E3E7);
+  Color grayIcon = Color(0xFF95A1AC);
+  Color gray200 = Color(0xFFDBE2E7);
+  Color gray600 = Color(0xFF262D34);
+  Color black600 = Color(0xFF090F13);
+  Color tertiary400 = Color(0xFF39D2C0);
+  Color textColor = Color(0xFF1E2429);
 }
 
 abstract class Typography {

@@ -11,8 +11,58 @@ service cloud.firestore {
     match /skills/{document} {
       allow create: if true;
       allow read: if true;
-      allow write: if true;
-      allow delete: if true;
+      allow write: if request.auth != null;
+      allow delete: if false;
     }
+
+    match /requests/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if request.auth != null;
+      allow delete: if false;
+    }
+
+    match /requests/{parent}/destination/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if request.auth != null;
+      allow delete: if false;
+    }
+
+    match /{path=**}/destination/{document} {
+      allow read: if true;
+    }
+
+
+    match /requests/{parent}/distance/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if request.auth != null;
+      allow delete: if false;
+    }
+
+    match /{path=**}/distance/{document} {
+      allow read: if true;
+    }
+
+
+    match /users/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if false;
+    }
+
+    match /requests/{parent}/position/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if request.auth != null;
+      allow delete: if false;
+    }
+
+    match /{path=**}/position/{document} {
+      allow read: if true;
+    }
+
   }
 }

@@ -17,7 +17,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CompleteProfileWidget extends StatefulWidget {
-  const CompleteProfileWidget({Key key}) : super(key: key);
+  const CompleteProfileWidget({
+    Key key,
+    this.email,
+    this.password,
+  }) : super(key: key);
+
+  final String email;
+  final String password;
 
   @override
   _CompleteProfileWidgetState createState() => _CompleteProfileWidgetState();

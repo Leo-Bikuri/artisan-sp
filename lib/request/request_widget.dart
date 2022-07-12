@@ -87,7 +87,7 @@ class _RequestWidgetState extends State<RequestWidget> {
                     children: [
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.6,
+                        height: MediaQuery.of(context).size.height * 0.7,
                         decoration: BoxDecoration(
                           color: Color(0xFFEEEEEE),
                         ),
@@ -142,7 +142,7 @@ class _RequestWidgetState extends State<RequestWidget> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(50),
                                       child: Image.network(
-                                        'https://picsum.photos/seed/487/600',
+                                        columnUsersRecord.photoUrl,
                                         width: 74,
                                         height: 75,
                                         fit: BoxFit.cover,

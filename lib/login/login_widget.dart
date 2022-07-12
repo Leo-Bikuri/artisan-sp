@@ -4,6 +4,7 @@ import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../forgot_password/forgot_password_widget.dart';
 import '../home/home_widget.dart';
+import '../home2/home2_widget.dart';
 import '../signup/signup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -223,7 +224,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               type: PageTransitionType.bottomToTop,
                               duration: Duration(milliseconds: 300),
                               reverseDuration: Duration(milliseconds: 300),
-                              child: HomeWidget(),
+                              child: Home2Widget(),
                             ),
                             (r) => false,
                           );

@@ -84,7 +84,7 @@ class _MyAppState extends State<MyApp> {
               ),
             )
           : currentUser.loggedIn
-              ? HomeWidget()
+              ? Home2Widget()
               : LoginWidget(),
     );
   }

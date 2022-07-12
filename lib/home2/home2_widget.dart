@@ -43,10 +43,6 @@ class _Home2WidgetState extends State<Home2Widget> {
           );
         }
         List<RequestsRecord> home2RequestsRecordList = snapshot.data;
-        // Return an empty Container when the document does not exist.
-        if (snapshot.data.isEmpty) {
-          return Container();
-        }
         final home2RequestsRecord = home2RequestsRecordList.isNotEmpty
             ? home2RequestsRecordList.first
             : null;
@@ -74,10 +70,6 @@ class _Home2WidgetState extends State<Home2Widget> {
                   );
                 }
                 List<DistanceRecord> columnDistanceRecordList = snapshot.data;
-                // Return an empty Container when the document does not exist.
-                if (snapshot.data.isEmpty) {
-                  return Container();
-                }
                 final columnDistanceRecord = columnDistanceRecordList.isNotEmpty
                     ? columnDistanceRecordList.first
                     : null;

@@ -139,7 +139,7 @@ class _Home2WidgetState extends State<Home2Widget> {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.35,
+                        height: MediaQuery.of(context).size.height * 0.65,
                         decoration: BoxDecoration(
                           color: Color(0xFFEEEEEE),
                         ),
@@ -438,18 +438,17 @@ class _Home2WidgetState extends State<Home2Widget> {
                             ],
                           ),
                         ),
-                      if (home2RequestsRecord != null)
+                      if (!(home2RequestsRecord != null) ?? true)
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 12),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              if (!(home2RequestsRecord != null) ?? true)
-                                Text(
-                                  'No active requests',
-                                  style: FlutterFlowTheme.of(context).title3,
-                                ),
+                              Text(
+                                'No active requests',
+                                style: FlutterFlowTheme.of(context).title3,
+                              ),
                             ],
                           ),
                         ),

@@ -1,5 +1,4 @@
 import '../auth/auth_util.dart';
-import '../complete_profile/complete_profile_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -307,15 +306,14 @@ class _SignupWidgetState extends State<SignupWidget> {
                             return;
                           }
 
-                          await Navigator.pushAndRemoveUntil(
+                          await Navigator.push(
                             context,
                             PageTransition(
                               type: PageTransitionType.bottomToTop,
                               duration: Duration(milliseconds: 300),
                               reverseDuration: Duration(milliseconds: 300),
-                              child: CompleteProfileWidget(),
+                              child: LoginWidget(),
                             ),
-                            (r) => false,
                           );
                         },
                         text: 'Create Account',

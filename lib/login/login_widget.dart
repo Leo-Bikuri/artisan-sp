@@ -1,4 +1,5 @@
 import '../auth/auth_util.dart';
+import '../complete_profile/complete_profile_widget.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -218,16 +219,34 @@ class _LoginWidgetState extends State<LoginWidget> {
                             return;
                           }
 
-                          await Navigator.pushAndRemoveUntil(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.bottomToTop,
-                              duration: Duration(milliseconds: 300),
-                              reverseDuration: Duration(milliseconds: 300),
-                              child: Home2Widget(),
-                            ),
-                            (r) => false,
-                          );
+                          if ((valueOrDefault(
+                                      currentUserDocument?.identificationNumber,
+                                      '') !=
+                                  null &&
+                              valueOrDefault(
+                                      currentUserDocument?.identificationNumber,
+                                      '') !=
+                                  '')) {
+                            await Navigator.pushAndRemoveUntil(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.bottomToTop,
+                                duration: Duration(milliseconds: 300),
+                                reverseDuration: Duration(milliseconds: 300),
+                                child: Home2Widget(),
+                              ),
+                              (r) => false,
+                            );
+                            return;
+                          } else {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CompleteProfileWidget(),
+                              ),
+                            );
+                            return;
+                          }
                         },
                         text: 'Log In',
                         options: FFButtonOptions(

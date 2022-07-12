@@ -74,12 +74,12 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(brightness: Brightness.light),
       themeMode: _themeMode,
       home: initialUser == null || displaySplashImage
-          ? Center(
-              child: SizedBox(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(
-                  color: FlutterFlowTheme.of(context).tertiaryColor,
+          ? Container(
+              color: Colors.transparent,
+              child: Builder(
+                builder: (context) => Image.asset(
+                  'assets/images/Welcome_screen.png',
+                  fit: BoxFit.cover,
                 ),
               ),
             )

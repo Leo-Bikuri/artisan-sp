@@ -48,7 +48,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                 color: Color(0xFFE9E9E9),
               ),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 85, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,

@@ -20,9 +20,28 @@ class _Home2WidgetState extends State<Home2Widget> {
   LatLng googleMapsCenter;
   final googleMapsController = Completer<GoogleMapController>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  LatLng currentUserLocationValue;
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
+        .then((loc) => setState(() => currentUserLocationValue = loc));
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (currentUserLocationValue == null) {
+      return Center(
+        child: SizedBox(
+          width: 50,
+          height: 50,
+          child: CircularProgressIndicator(
+            color: FlutterFlowTheme.of(context).tertiaryColor,
+          ),
+        ),
+      );
+    }
     return StreamBuilder<List<RequestsRecord>>(
       stream: queryRequestsRecord(
         queryBuilder: (requestsRecord) =>
@@ -109,25 +128,23 @@ class _Home2WidgetState extends State<Home2Widget> {
                     decoration: BoxDecoration(
                       color: Color(0xFFEEEEEE),
                     ),
-                    child: AuthUserStreamWidget(
-                      child: FlutterFlowGoogleMap(
-                        controller: googleMapsController,
-                        onCameraIdle: (latLng) => googleMapsCenter = latLng,
-                        initialLocation: googleMapsCenter ??=
-                            currentUserDocument?.location,
-                        markerColor: GoogleMarkerColor.violet,
-                        mapType: MapType.normal,
-                        style: GoogleMapStyle.standard,
-                        initialZoom: 14,
-                        allowInteraction: true,
-                        allowZoom: true,
-                        showZoomControls: false,
-                        showLocation: true,
-                        showCompass: false,
-                        showMapToolbar: false,
-                        showTraffic: false,
-                        centerMapOnMarkerTap: true,
-                      ),
+                    child: FlutterFlowGoogleMap(
+                      controller: googleMapsController,
+                      onCameraIdle: (latLng) => googleMapsCenter = latLng,
+                      initialLocation: googleMapsCenter ??=
+                          currentUserLocationValue,
+                      markerColor: GoogleMarkerColor.violet,
+                      mapType: MapType.normal,
+                      style: GoogleMapStyle.standard,
+                      initialZoom: 14,
+                      allowInteraction: true,
+                      allowZoom: true,
+                      showZoomControls: false,
+                      showLocation: true,
+                      showCompass: false,
+                      showMapToolbar: false,
+                      showTraffic: false,
+                      centerMapOnMarkerTap: true,
                     ),
                   ),
                   Padding(

@@ -966,6 +966,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                         monthController.text,
                                         dayController.text),
                                     gender: genderController.text,
+                                    skill: dropDownValue,
                                   );
                                   await currentUserReference
                                       .update(serviceProvidersUpdateData);

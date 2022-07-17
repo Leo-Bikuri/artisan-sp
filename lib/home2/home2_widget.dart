@@ -7,6 +7,7 @@ import '../request/request_widget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Home2Widget extends StatefulWidget {
@@ -25,6 +26,17 @@ class _Home2WidgetState extends State<Home2Widget> {
   @override
   void initState() {
     super.initState();
+    // On page load action.
+    SchedulerBinding.instance?.addPostFrameCallback((_) async {
+      currentUserLocationValue =
+          await getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0));
+
+      final serviceProvidersUpdateData = createServiceProvidersRecordData(
+        location: currentUserLocationValue,
+      );
+      await currentUserReference.update(serviceProvidersUpdateData);
+    });
+
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
         .then((loc) => setState(() => currentUserLocationValue = loc));
   }

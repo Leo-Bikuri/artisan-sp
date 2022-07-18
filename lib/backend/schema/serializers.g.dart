@@ -8,7 +8,6 @@ part of 'serializers.dart';
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(DestinationRecord.serializer)
-      ..add(DistanceRecord.serializer)
       ..add(PositionRecord.serializer)
       ..add(RequestsRecord.serializer)
       ..add(ServiceProvidersRecord.serializer)

@@ -161,7 +161,7 @@ class _Home2WidgetState extends State<Home2Widget> {
                   ),
                   Container(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.42,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryColor,
                     ),

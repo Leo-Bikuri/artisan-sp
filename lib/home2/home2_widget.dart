@@ -387,12 +387,8 @@ class _Home2WidgetState extends State<Home2Widget> {
                                             8, 8, 8, 8),
                                         child: InkWell(
                                           onTap: () async {
-                                            final requestsUpdateData =
-                                                createRequestsRecordData(
-                                              status: 'Declined',
-                                            );
                                             await home2RequestsRecord.reference
-                                                .update(requestsUpdateData);
+                                                .delete();
                                           },
                                           child: Container(
                                             width: MediaQuery.of(context)

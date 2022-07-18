@@ -8,7 +8,6 @@ import 'schema/service_providers_record.dart';
 import 'schema/skills_record.dart';
 import 'schema/requests_record.dart';
 import 'schema/destination_record.dart';
-import 'schema/distance_record.dart';
 import 'schema/users_record.dart';
 import 'schema/position_record.dart';
 import 'schema/serializers.dart';
@@ -22,7 +21,6 @@ export 'schema/service_providers_record.dart';
 export 'schema/skills_record.dart';
 export 'schema/requests_record.dart';
 export 'schema/destination_record.dart';
-export 'schema/distance_record.dart';
 export 'schema/users_record.dart';
 export 'schema/position_record.dart';
 
@@ -192,51 +190,6 @@ Future<FFFirestorePage<DestinationRecord>> queryDestinationRecordPage({
     queryCollectionPage(
       DestinationRecord.collection(parent),
       DestinationRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query DistanceRecords (as a Stream and as a Future).
-Stream<List<DistanceRecord>> queryDistanceRecord({
-  DocumentReference parent,
-  Query Function(Query) queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      DistanceRecord.collection(parent),
-      DistanceRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<DistanceRecord>> queryDistanceRecordOnce({
-  DocumentReference parent,
-  Query Function(Query) queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      DistanceRecord.collection(parent),
-      DistanceRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<DistanceRecord>> queryDistanceRecordPage({
-  DocumentReference parent,
-  Query Function(Query) queryBuilder,
-  DocumentSnapshot nextPageMarker,
-  int pageSize,
-  bool isStream,
-}) =>
-    queryCollectionPage(
-      DistanceRecord.collection(parent),
-      DistanceRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,

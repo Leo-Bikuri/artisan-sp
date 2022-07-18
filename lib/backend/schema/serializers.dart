@@ -4,7 +4,6 @@ import 'service_providers_record.dart';
 import 'skills_record.dart';
 import 'requests_record.dart';
 import 'destination_record.dart';
-import 'distance_record.dart';
 import 'users_record.dart';
 import 'position_record.dart';
 
@@ -21,7 +20,6 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   SkillsRecord,
   RequestsRecord,
   DestinationRecord,
-  DistanceRecord,
   UsersRecord,
   PositionRecord,
 ])

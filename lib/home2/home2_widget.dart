@@ -161,7 +161,7 @@ class _Home2WidgetState extends State<Home2Widget> {
                   ),
                   Container(
                     width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.42,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryColor,
                     ),
@@ -387,12 +387,8 @@ class _Home2WidgetState extends State<Home2Widget> {
                                             8, 8, 8, 8),
                                         child: InkWell(
                                           onTap: () async {
-                                            final requestsUpdateData =
-                                                createRequestsRecordData(
-                                              status: 'Declined',
-                                            );
                                             await home2RequestsRecord.reference
-                                                .update(requestsUpdateData);
+                                                .delete();
                                           },
                                           child: Container(
                                             width: MediaQuery.of(context)

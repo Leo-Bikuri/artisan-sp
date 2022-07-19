@@ -4,6 +4,7 @@ import '../flutter_flow/flutter_flow_google_map.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../home2/home2_widget.dart';
+import 'package:map_launcher/map_launcher.dart' as $ml;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -36,24 +37,10 @@ class _RequestWidgetState extends State<RequestWidget> {
       );
       await currentUserReference.update(serviceProvidersUpdateData);
     });
-
-    getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
-        .then((loc) => setState(() => currentUserLocationValue = loc));
   }
 
   @override
   Widget build(BuildContext context) {
-    if (currentUserLocationValue == null) {
-      return Center(
-        child: SizedBox(
-          width: 50,
-          height: 50,
-          child: CircularProgressIndicator(
-            color: FlutterFlowTheme.of(context).tertiaryColor,
-          ),
-        ),
-      );
-    }
     return StreamBuilder<List<RequestsRecord>>(
       stream: queryRequestsRecord(
         queryBuilder: (requestsRecord) =>
@@ -90,30 +77,63 @@ class _RequestWidgetState extends State<RequestWidget> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFEEEEEE),
+                  StreamBuilder<List<DestinationRecord>>(
+                    stream: queryDestinationRecord(
+                      parent: requestRequestsRecord.reference,
+                      singleRecord: true,
                     ),
-                    child: FlutterFlowGoogleMap(
-                      controller: googleMapsController,
-                      onCameraIdle: (latLng) => googleMapsCenter = latLng,
-                      initialLocation: googleMapsCenter ??=
-                          currentUserLocationValue,
-                      markerColor: GoogleMarkerColor.violet,
-                      mapType: MapType.normal,
-                      style: GoogleMapStyle.standard,
-                      initialZoom: 14,
-                      allowInteraction: true,
-                      allowZoom: true,
-                      showZoomControls: false,
-                      showLocation: true,
-                      showCompass: false,
-                      showMapToolbar: false,
-                      showTraffic: false,
-                      centerMapOnMarkerTap: true,
-                    ),
+                    builder: (context, snapshot) {
+                      // Customize what your widget looks like when it's loading.
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: CircularProgressIndicator(
+                              color: FlutterFlowTheme.of(context).tertiaryColor,
+                            ),
+                          ),
+                        );
+                      }
+                      List<DestinationRecord> containerDestinationRecordList =
+                          snapshot.data;
+                      final containerDestinationRecord =
+                          containerDestinationRecordList.isNotEmpty
+                              ? containerDestinationRecordList.first
+                              : null;
+                      return InkWell(
+                        onTap: () async {
+                          await launchMap(
+                            location: containerDestinationRecord.location,
+                          );
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 0.7,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFEEEEEE),
+                          ),
+                          child: FlutterFlowGoogleMap(
+                            controller: googleMapsController,
+                            onCameraIdle: (latLng) => googleMapsCenter = latLng,
+                            initialLocation: googleMapsCenter ??=
+                                containerDestinationRecord.location,
+                            markerColor: GoogleMarkerColor.violet,
+                            mapType: MapType.normal,
+                            style: GoogleMapStyle.standard,
+                            initialZoom: 14,
+                            allowInteraction: true,
+                            allowZoom: true,
+                            showZoomControls: false,
+                            showLocation: true,
+                            showCompass: false,
+                            showMapToolbar: false,
+                            showTraffic: false,
+                            centerMapOnMarkerTap: true,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   StreamBuilder<UsersRecord>(
                     stream:
@@ -262,33 +282,54 @@ class _RequestWidgetState extends State<RequestWidget> {
                                   ],
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 16, 0, 0),
-                                      child: Icon(
-                                        Icons.check,
-                                        color: Colors.white,
-                                        size: 44,
+                                child: InkWell(
+                                  onTap: () async {
+                                    final requestsUpdateData =
+                                        createRequestsRecordData(
+                                      status: 'Complete',
+                                    );
+                                    await requestRequestsRecord.reference
+                                        .update(requestsUpdateData);
+                                    await Navigator.pushAndRemoveUntil(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.bottomToTop,
+                                        duration: Duration(milliseconds: 300),
+                                        reverseDuration:
+                                            Duration(milliseconds: 300),
+                                        child: Home2Widget(),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 8, 0, 0),
-                                      child: AutoSizeText(
-                                        'Done',
-                                        textAlign: TextAlign.center,
-                                        style: FlutterFlowTheme.of(context)
-                                            .subtitle1
-                                            .override(
-                                              fontFamily: 'Lexend Deca',
-                                              color: Colors.white,
-                                            ),
+                                      (r) => false,
+                                    );
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 16, 0, 0),
+                                        child: Icon(
+                                          Icons.check,
+                                          color: Colors.white,
+                                          size: 44,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 8, 0, 0),
+                                        child: AutoSizeText(
+                                          'Done',
+                                          textAlign: TextAlign.center,
+                                          style: FlutterFlowTheme.of(context)
+                                              .subtitle1
+                                              .override(
+                                                fontFamily: 'Lexend Deca',
+                                                color: Colors.white,
+                                              ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -316,36 +357,58 @@ class _RequestWidgetState extends State<RequestWidget> {
                                       .tertiaryColor,
                                 ),
                               ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 16, 0, 0),
-                                    child: Icon(
-                                      Icons.cancel_outlined,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 44,
+                              child: InkWell(
+                                onTap: () async {
+                                  final requestsUpdateData =
+                                      createRequestsRecordData(
+                                    status: 'Cancelled',
+                                  );
+                                  await requestRequestsRecord.reference
+                                      .update(requestsUpdateData);
+                                  await Navigator.pushAndRemoveUntil(
+                                    context,
+                                    PageTransition(
+                                      type: PageTransitionType.bottomToTop,
+                                      duration: Duration(milliseconds: 300),
+                                      reverseDuration:
+                                          Duration(milliseconds: 300),
+                                      child: Home2Widget(),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 8, 0, 0),
-                                    child: AutoSizeText(
-                                      'Cancel',
-                                      textAlign: TextAlign.center,
-                                      style: FlutterFlowTheme.of(context)
-                                          .subtitle1
-                                          .override(
-                                            fontFamily: 'Lexend Deca',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                          ),
+                                    (r) => false,
+                                  );
+                                },
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 16, 0, 0),
+                                      child: Icon(
+                                        Icons.cancel_outlined,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 44,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 0, 0),
+                                      child: AutoSizeText(
+                                        'Cancel',
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .subtitle1
+                                            .override(
+                                              fontFamily: 'Lexend Deca',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                            ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

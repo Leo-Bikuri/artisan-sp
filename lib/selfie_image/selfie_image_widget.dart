@@ -90,7 +90,6 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            var _shouldSetState = false;
                             final selectedMedia = await selectMedia(
                               imageQuality: 100,
                               multiImage: false,
@@ -133,11 +132,38 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                               docBackImage: widget.back,
                               selfieImage: uploadedFileUrl,
                             );
-                            _shouldSetState = true;
+
+                            setState(() {});
+                          },
+                          text: 'Click to add image',
+                          options: FFButtonOptions(
+                            width: 180,
+                            height: 40,
+                            color: FlutterFlowTheme.of(context).secondaryColor,
+                            textStyle:
+                                FlutterFlowTheme.of(context).subtitle2.override(
+                                      fontFamily: 'Lexend Deca',
+                                      color: FlutterFlowTheme.of(context)
+                                          .tertiaryColor,
+                                    ),
+                            elevation: 2,
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).tertiaryColor,
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
                             if (((response?.statusCode ?? 200)) == 200) {
                               final serviceProvidersUpdateData =
                                   createServiceProvidersRecordData(
                                 photoUrl: uploadedFileUrl,
+                                available: true,
                               );
                               await currentUserReference
                                   .update(serviceProvidersUpdateData);
@@ -151,7 +177,6 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                                 ),
                                 (r) => false,
                               );
-                              if (_shouldSetState) setState(() {});
                               return;
                             } else {
                               await showDialog(
@@ -170,22 +195,21 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                                   );
                                 },
                               );
+                              await currentUserReference.delete();
+                              await Navigator.pushAndRemoveUntil(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.bottomToTop,
+                                  duration: Duration(milliseconds: 300),
+                                  reverseDuration: Duration(milliseconds: 300),
+                                  child: LoginWidget(),
+                                ),
+                                (r) => false,
+                              );
+                              return;
                             }
-
-                            await currentUserReference.delete();
-                            await Navigator.pushAndRemoveUntil(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.bottomToTop,
-                                duration: Duration(milliseconds: 300),
-                                reverseDuration: Duration(milliseconds: 300),
-                                child: LoginWidget(),
-                              ),
-                              (r) => false,
-                            );
-                            if (_shouldSetState) setState(() {});
                           },
-                          text: 'Click to add image',
+                          text: 'Finish',
                           options: FFButtonOptions(
                             width: 180,
                             height: 40,

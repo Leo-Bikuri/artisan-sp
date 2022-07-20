@@ -75,78 +75,107 @@ class _BackIdWidgetState extends State<BackIdWidget> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                    child: FFButtonWidget(
-                      onPressed: () async {
-                        final selectedMedia = await selectMedia(
-                          imageQuality: 100,
-                          multiImage: false,
-                        );
-                        if (selectedMedia != null &&
-                            selectedMedia.every((m) =>
-                                validateFileFormat(m.storagePath, context))) {
-                          showUploadMessage(
-                            context,
-                            'Uploading file...',
-                            showLoading: true,
+                  if ((uploadedFileUrl == null || uploadedFileUrl == ''))
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          final selectedMedia = await selectMedia(
+                            imageQuality: 100,
+                            multiImage: false,
                           );
-                          final downloadUrls = (await Future.wait(selectedMedia
-                                  .map((m) async => await uploadData(
-                                      m.storagePath, m.bytes))))
-                              .where((u) => u != null)
-                              .toList();
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          if (downloadUrls != null &&
-                              downloadUrls.length == selectedMedia.length) {
-                            setState(
-                                () => uploadedFileUrl = downloadUrls.first);
+                          if (selectedMedia != null &&
+                              selectedMedia.every((m) =>
+                                  validateFileFormat(m.storagePath, context))) {
                             showUploadMessage(
                               context,
-                              'Success!',
+                              'Uploading file...',
+                              showLoading: true,
                             );
-                          } else {
-                            showUploadMessage(
-                              context,
-                              'Failed to upload media',
-                            );
-                            return;
+                            final downloadUrls = (await Future.wait(
+                                    selectedMedia.map((m) async =>
+                                        await uploadData(
+                                            m.storagePath, m.bytes))))
+                                .where((u) => u != null)
+                                .toList();
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            if (downloadUrls != null &&
+                                downloadUrls.length == selectedMedia.length) {
+                              setState(
+                                  () => uploadedFileUrl = downloadUrls.first);
+                              showUploadMessage(
+                                context,
+                                'Success!',
+                              );
+                            } else {
+                              showUploadMessage(
+                                context,
+                                'Failed to upload media',
+                              );
+                              return;
+                            }
                           }
-                        }
-
-                        await Navigator.push(
-                          context,
-                          PageTransition(
-                            type: PageTransitionType.leftToRight,
-                            duration: Duration(milliseconds: 300),
-                            reverseDuration: Duration(milliseconds: 300),
-                            child: SelfieImageWidget(
-                              front: widget.front,
-                              back: uploadedFileUrl,
-                            ),
+                        },
+                        text: 'Click to add image',
+                        options: FFButtonOptions(
+                          width: 180,
+                          height: 40,
+                          color: FlutterFlowTheme.of(context).secondaryColor,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Lexend Deca',
+                                color:
+                                    FlutterFlowTheme.of(context).tertiaryColor,
+                              ),
+                          elevation: 2,
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).tertiaryColor,
+                            width: 1,
                           ),
-                        );
-                      },
-                      text: 'Click to add image',
-                      options: FFButtonOptions(
-                        width: 180,
-                        height: 40,
-                        color: FlutterFlowTheme.of(context).secondaryColor,
-                        textStyle: FlutterFlowTheme.of(context)
-                            .subtitle2
-                            .override(
-                              fontFamily: 'Lexend Deca',
-                              color: FlutterFlowTheme.of(context).tertiaryColor,
-                            ),
-                        elevation: 2,
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).tertiaryColor,
-                          width: 1,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                  ),
+                  if ((uploadedFileUrl != null && uploadedFileUrl != ''))
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.leftToRight,
+                              duration: Duration(milliseconds: 300),
+                              reverseDuration: Duration(milliseconds: 300),
+                              child: SelfieImageWidget(
+                                front: widget.front,
+                                back: uploadedFileUrl,
+                              ),
+                            ),
+                          );
+                        },
+                        text: 'Continue',
+                        options: FFButtonOptions(
+                          width: 180,
+                          height: 40,
+                          color: FlutterFlowTheme.of(context).secondaryColor,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Lexend Deca',
+                                color:
+                                    FlutterFlowTheme.of(context).tertiaryColor,
+                              ),
+                          elevation: 2,
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).tertiaryColor,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ],

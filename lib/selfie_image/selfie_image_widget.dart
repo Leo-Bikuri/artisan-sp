@@ -28,6 +28,7 @@ class SelfieImageWidget extends StatefulWidget {
 
 class _SelfieImageWidgetState extends State<SelfieImageWidget> {
   ApiCallResponse response;
+  ApiCallResponse tokenResponse;
   String uploadedFileUrl = '';
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -136,14 +137,6 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                                       return;
                                     }
                                   }
-
-                                  response = await KycCall.call(
-                                    docFrontImage: widget.front,
-                                    docBackImage: widget.back,
-                                    selfieImage: uploadedFileUrl,
-                                  );
-
-                                  setState(() {});
                                 },
                                 text: 'Click to add image',
                                 options: FFButtonOptions(
@@ -175,6 +168,23 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                                   EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
+                                  var _shouldSetState = false;
+                                  tokenResponse = await KYCtokenCall.call(
+                                    clientId:
+                                        ' b3755fb0-0816-11ed-a9a4-eb09c9fc8606',
+                                    email: 'leo.bikuri@strathmore.edu',
+                                  );
+                                  _shouldSetState = true;
+                                  response = await KycCall.call(
+                                    docFrontImage: widget.front,
+                                    docBackImage: widget.back,
+                                    selfieImage: uploadedFileUrl,
+                                    token: getJsonField(
+                                      (tokenResponse?.jsonBody ?? ''),
+                                      r'''$.token''',
+                                    ).toString(),
+                                  );
+                                  _shouldSetState = true;
                                   if (((response?.statusCode ?? 200)) == 200) {
                                     final serviceProvidersUpdateData =
                                         createServiceProvidersRecordData(
@@ -194,6 +204,7 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                                       ),
                                       (r) => false,
                                     );
+                                    if (_shouldSetState) setState(() {});
                                     return;
                                   } else {
                                     await showDialog(
@@ -224,8 +235,11 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                                       ),
                                       (r) => false,
                                     );
+                                    if (_shouldSetState) setState(() {});
                                     return;
                                   }
+
+                                  if (_shouldSetState) setState(() {});
                                 },
                                 text: 'Finish',
                                 options: FFButtonOptions(

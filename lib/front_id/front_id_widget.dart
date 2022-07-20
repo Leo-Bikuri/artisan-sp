@@ -64,9 +64,9 @@ class _FrontIdWidgetState extends State<FrontIdWidget> {
                   child: Image.network(
                     valueOrDefault<String>(
                       uploadedFileUrl,
-                      'null',
+                      'https://firebasestorage.googleapis.com/v0/b/artisan-8a1a5.appspot.com/o/369918.svg?alt=media&token=c2063400-9aef-43c7-bc01-72d7409026ba',
                     ),
-                    width: double.infinity,
+                    width: 400,
                     height: 200,
                     fit: BoxFit.cover,
                   ),

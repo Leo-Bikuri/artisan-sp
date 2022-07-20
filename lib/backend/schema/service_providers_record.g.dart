@@ -115,6 +115,13 @@ class _$ServiceProvidersRecordSerializer
         ..add('rating')
         ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
+    value = object.available;
+    if (value != null) {
+      result
+        ..add('available')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.reference;
     if (value != null) {
       result
@@ -190,6 +197,10 @@ class _$ServiceProvidersRecordSerializer
           result.rating = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int;
           break;
+        case 'available':
+          result.available = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
         case 'Document__Reference__Field':
           result.reference = serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -231,6 +242,8 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
   @override
   final int rating;
   @override
+  final bool available;
+  @override
   final DocumentReference<Object> reference;
 
   factory _$ServiceProvidersRecord(
@@ -251,6 +264,7 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
       this.dob,
       this.gender,
       this.rating,
+      this.available,
       this.reference})
       : super._();
 
@@ -280,6 +294,7 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
         dob == other.dob &&
         gender == other.gender &&
         rating == other.rating &&
+        available == other.available &&
         reference == other.reference;
   }
 
@@ -297,19 +312,23 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc($jc(0, email.hashCode),
-                                                        password.hashCode),
-                                                    photoUrl.hashCode),
-                                                createdTime.hashCode),
-                                            phoneNumber.hashCode),
-                                        uid.hashCode),
-                                    location.hashCode),
-                                skill.hashCode),
-                            displayName.hashCode),
-                        identificationNumber.hashCode),
-                    dob.hashCode),
-                gender.hashCode),
-            rating.hashCode),
+                                                    $jc(
+                                                        $jc(
+                                                            $jc(0,
+                                                                email.hashCode),
+                                                            password.hashCode),
+                                                        photoUrl.hashCode),
+                                                    createdTime.hashCode),
+                                                phoneNumber.hashCode),
+                                            uid.hashCode),
+                                        location.hashCode),
+                                    skill.hashCode),
+                                displayName.hashCode),
+                            identificationNumber.hashCode),
+                        dob.hashCode),
+                    gender.hashCode),
+                rating.hashCode),
+            available.hashCode),
         reference.hashCode));
   }
 
@@ -329,6 +348,7 @@ class _$ServiceProvidersRecord extends ServiceProvidersRecord {
           ..add('dob', dob)
           ..add('gender', gender)
           ..add('rating', rating)
+          ..add('available', available)
           ..add('reference', reference))
         .toString();
   }
@@ -391,6 +411,10 @@ class ServiceProvidersRecordBuilder
   int get rating => _$this._rating;
   set rating(int rating) => _$this._rating = rating;
 
+  bool _available;
+  bool get available => _$this._available;
+  set available(bool available) => _$this._available = available;
+
   DocumentReference<Object> _reference;
   DocumentReference<Object> get reference => _$this._reference;
   set reference(DocumentReference<Object> reference) =>
@@ -416,6 +440,7 @@ class ServiceProvidersRecordBuilder
       _dob = $v.dob;
       _gender = $v.gender;
       _rating = $v.rating;
+      _available = $v.available;
       _reference = $v.reference;
       _$v = null;
     }
@@ -450,6 +475,7 @@ class ServiceProvidersRecordBuilder
             dob: dob,
             gender: gender,
             rating: rating,
+            available: available,
             reference: reference);
     replace(_$result);
     return _$result;

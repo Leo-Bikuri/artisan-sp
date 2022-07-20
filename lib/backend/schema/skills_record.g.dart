@@ -34,6 +34,13 @@ class _$SkillsRecordSerializer implements StructuredSerializer<SkillsRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.charge;
+    if (value != null) {
+      result
+        ..add('charge')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.reference;
     if (value != null) {
       result
@@ -64,6 +71,10 @@ class _$SkillsRecordSerializer implements StructuredSerializer<SkillsRecord> {
           result.imageUrl = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String;
           break;
+        case 'charge':
+          result.charge = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
         case 'Document__Reference__Field':
           result.reference = serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -83,12 +94,15 @@ class _$SkillsRecord extends SkillsRecord {
   @override
   final String imageUrl;
   @override
+  final String charge;
+  @override
   final DocumentReference<Object> reference;
 
   factory _$SkillsRecord([void Function(SkillsRecordBuilder) updates]) =>
       (new SkillsRecordBuilder()..update(updates)).build();
 
-  _$SkillsRecord._({this.name, this.imageUrl, this.reference}) : super._();
+  _$SkillsRecord._({this.name, this.imageUrl, this.charge, this.reference})
+      : super._();
 
   @override
   SkillsRecord rebuild(void Function(SkillsRecordBuilder) updates) =>
@@ -103,13 +117,15 @@ class _$SkillsRecord extends SkillsRecord {
     return other is SkillsRecord &&
         name == other.name &&
         imageUrl == other.imageUrl &&
+        charge == other.charge &&
         reference == other.reference;
   }
 
   @override
   int get hashCode {
-    return $jf(
-        $jc($jc($jc(0, name.hashCode), imageUrl.hashCode), reference.hashCode));
+    return $jf($jc(
+        $jc($jc($jc(0, name.hashCode), imageUrl.hashCode), charge.hashCode),
+        reference.hashCode));
   }
 
   @override
@@ -117,6 +133,7 @@ class _$SkillsRecord extends SkillsRecord {
     return (newBuiltValueToStringHelper('SkillsRecord')
           ..add('name', name)
           ..add('imageUrl', imageUrl)
+          ..add('charge', charge)
           ..add('reference', reference))
         .toString();
   }
@@ -134,6 +151,10 @@ class SkillsRecordBuilder
   String get imageUrl => _$this._imageUrl;
   set imageUrl(String imageUrl) => _$this._imageUrl = imageUrl;
 
+  String _charge;
+  String get charge => _$this._charge;
+  set charge(String charge) => _$this._charge = charge;
+
   DocumentReference<Object> _reference;
   DocumentReference<Object> get reference => _$this._reference;
   set reference(DocumentReference<Object> reference) =>
@@ -148,6 +169,7 @@ class SkillsRecordBuilder
     if ($v != null) {
       _name = $v.name;
       _imageUrl = $v.imageUrl;
+      _charge = $v.charge;
       _reference = $v.reference;
       _$v = null;
     }
@@ -169,7 +191,10 @@ class SkillsRecordBuilder
   _$SkillsRecord build() {
     final _$result = _$v ??
         new _$SkillsRecord._(
-            name: name, imageUrl: imageUrl, reference: reference);
+            name: name,
+            imageUrl: imageUrl,
+            charge: charge,
+            reference: reference);
     replace(_$result);
     return _$result;
   }

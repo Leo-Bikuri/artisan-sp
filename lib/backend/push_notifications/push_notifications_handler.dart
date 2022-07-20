@@ -86,6 +86,19 @@ final pageBuilderMap = <String, Future<Widget> Function(Map<String, dynamic>)>{
       ),
   'forgotPassword': (data) async => ForgotPasswordWidget(),
   'Request': (data) async => RequestWidget(),
+  'history': (data) async => HistoryWidget(),
+  'editProfile': (data) async => EditProfileWidget(),
+  'menu': (data) async => MenuWidget(),
+  'front_id': (data) async => FrontIdWidget(
+        frontUrl: getParameter(data, 'frontUrl'),
+      ),
+  'back_id': (data) async => BackIdWidget(
+        front: getParameter(data, 'front'),
+      ),
+  'selfie_image': (data) async => SelfieImageWidget(
+        front: getParameter(data, 'front'),
+        back: getParameter(data, 'back'),
+      ),
 };
 
 bool hasMatchingParameters(Map<String, dynamic> data, Set<String> params) =>

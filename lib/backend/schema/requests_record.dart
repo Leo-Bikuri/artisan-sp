@@ -27,6 +27,10 @@ abstract class RequestsRecord
   double get distance;
 
   @nullable
+  @BuiltValueField(wireName: 'created_at')
+  DateTime get createdAt;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
@@ -62,6 +66,7 @@ Map<String, dynamic> createRequestsRecordData({
   String status,
   String username,
   double distance,
+  DateTime createdAt,
 }) =>
     serializers.toFirestore(
         RequestsRecord.serializer,
@@ -70,4 +75,5 @@ Map<String, dynamic> createRequestsRecordData({
           ..userId = userId
           ..status = status
           ..username = username
-          ..distance = distance));
+          ..distance = distance
+          ..createdAt = createdAt));

@@ -239,7 +239,7 @@ class _RequestWidgetState extends State<RequestWidget> {
                     },
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -255,6 +255,13 @@ class _RequestWidgetState extends State<RequestWidget> {
                                 );
                                 await requestRequestsRecord.reference
                                     .update(requestsUpdateData);
+
+                                final serviceProvidersUpdateData =
+                                    createServiceProvidersRecordData(
+                                  available: true,
+                                );
+                                await currentUserReference
+                                    .update(serviceProvidersUpdateData);
                                 await Navigator.pushAndRemoveUntil(
                                   context,
                                   PageTransition(
@@ -282,54 +289,33 @@ class _RequestWidgetState extends State<RequestWidget> {
                                   ],
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: InkWell(
-                                  onTap: () async {
-                                    final requestsUpdateData =
-                                        createRequestsRecordData(
-                                      status: 'Complete',
-                                    );
-                                    await requestRequestsRecord.reference
-                                        .update(requestsUpdateData);
-                                    await Navigator.pushAndRemoveUntil(
-                                      context,
-                                      PageTransition(
-                                        type: PageTransitionType.bottomToTop,
-                                        duration: Duration(milliseconds: 300),
-                                        reverseDuration:
-                                            Duration(milliseconds: 300),
-                                        child: Home2Widget(),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 16, 0, 0),
+                                      child: Icon(
+                                        Icons.check,
+                                        color: Colors.white,
+                                        size: 44,
                                       ),
-                                      (r) => false,
-                                    );
-                                  },
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 16, 0, 0),
-                                        child: Icon(
-                                          Icons.check,
-                                          color: Colors.white,
-                                          size: 44,
-                                        ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 8, 0, 0),
+                                      child: AutoSizeText(
+                                        'Done',
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .subtitle1
+                                            .override(
+                                              fontFamily: 'Lexend Deca',
+                                              color: Colors.white,
+                                            ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 8, 0, 0),
-                                        child: AutoSizeText(
-                                          'Done',
-                                          textAlign: TextAlign.center,
-                                          style: FlutterFlowTheme.of(context)
-                                              .subtitle1
-                                              .override(
-                                                fontFamily: 'Lexend Deca',
-                                                color: Colors.white,
-                                              ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -338,45 +324,52 @@ class _RequestWidgetState extends State<RequestWidget> {
                         Expanded(
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              height: 100,
-                              decoration: BoxDecoration(
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 3,
-                                    color: Color(0x39000000),
-                                    offset: Offset(0, 1),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
+                            child: InkWell(
+                              onTap: () async {
+                                final requestsUpdateData =
+                                    createRequestsRecordData(
+                                  status: 'Cancelled',
+                                );
+                                await requestRequestsRecord.reference
+                                    .update(requestsUpdateData);
+
+                                final serviceProvidersUpdateData =
+                                    createServiceProvidersRecordData(
+                                  available: true,
+                                );
+                                await currentUserReference
+                                    .update(serviceProvidersUpdateData);
+                                await Navigator.pushAndRemoveUntil(
+                                  context,
+                                  PageTransition(
+                                    type: PageTransitionType.bottomToTop,
+                                    duration: Duration(milliseconds: 300),
+                                    reverseDuration:
+                                        Duration(milliseconds: 300),
+                                    child: Home2Widget(),
+                                  ),
+                                  (r) => false,
+                                );
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                height: 100,
+                                decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
-                                      .tertiaryColor,
+                                      .secondaryColor,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 3,
+                                      color: Color(0x39000000),
+                                      offset: Offset(0, 1),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: FlutterFlowTheme.of(context)
+                                        .tertiaryColor,
+                                  ),
                                 ),
-                              ),
-                              child: InkWell(
-                                onTap: () async {
-                                  final requestsUpdateData =
-                                      createRequestsRecordData(
-                                    status: 'Cancelled',
-                                  );
-                                  await requestRequestsRecord.reference
-                                      .update(requestsUpdateData);
-                                  await Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.bottomToTop,
-                                      duration: Duration(milliseconds: 300),
-                                      reverseDuration:
-                                          Duration(milliseconds: 300),
-                                      child: Home2Widget(),
-                                    ),
-                                    (r) => false,
-                                  );
-                                },
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,

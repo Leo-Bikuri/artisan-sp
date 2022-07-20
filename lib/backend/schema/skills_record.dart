@@ -18,12 +18,16 @@ abstract class SkillsRecord
   String get imageUrl;
 
   @nullable
+  String get charge;
+
+  @nullable
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference get reference;
 
   static void _initializeBuilder(SkillsRecordBuilder builder) => builder
     ..name = ''
-    ..imageUrl = '';
+    ..imageUrl = ''
+    ..charge = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('skills');
@@ -49,9 +53,11 @@ abstract class SkillsRecord
 Map<String, dynamic> createSkillsRecordData({
   String name,
   String imageUrl,
+  String charge,
 }) =>
     serializers.toFirestore(
         SkillsRecord.serializer,
         SkillsRecord((s) => s
           ..name = name
-          ..imageUrl = imageUrl));
+          ..imageUrl = imageUrl
+          ..charge = charge));

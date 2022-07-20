@@ -3,6 +3,7 @@ import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_google_map.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
+import '../menu/menu_widget.dart';
 import '../request/request_widget.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,6 +36,17 @@ class _Home2WidgetState extends State<Home2Widget> {
         location: currentUserLocationValue,
       );
       await currentUserReference.update(serviceProvidersUpdateData);
+      if (valueOrDefault(currentUserDocument?.available, false)) {
+        return;
+      }
+
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RequestWidget(),
+        ),
+      );
+      return;
     });
 
     getCurrentUserLocation(defaultLocation: LatLng(0.0, 0.0), cached: true)
@@ -100,13 +112,23 @@ class _Home2WidgetState extends State<Home2Widget> {
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(2, 2, 2, 2),
                             child: AuthUserStreamWidget(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(40),
-                                child: Image.network(
-                                  currentUserPhoto,
-                                  width: 40,
-                                  height: 40,
-                                  fit: BoxFit.cover,
+                              child: InkWell(
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MenuWidget(),
+                                    ),
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(40),
+                                  child: Image.network(
+                                    currentUserPhoto,
+                                    width: 40,
+                                    height: 40,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
                             ),
@@ -295,6 +317,13 @@ class _Home2WidgetState extends State<Home2Widget> {
                                             );
                                             await home2RequestsRecord.reference
                                                 .update(requestsUpdateData);
+
+                                            final serviceProvidersUpdateData =
+                                                createServiceProvidersRecordData(
+                                              available: false,
+                                            );
+                                            await currentUserReference.update(
+                                                serviceProvidersUpdateData);
                                             await Navigator.pushAndRemoveUntil(
                                               context,
                                               PageTransition(

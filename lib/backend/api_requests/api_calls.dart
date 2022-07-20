@@ -6,39 +6,28 @@ export 'api_manager.dart' show ApiCallResponse;
 
 class KycCall {
   static Future<ApiCallResponse> call({
-    String id = '',
-    String firstName = '',
-    String lastName = '',
-    String middleName = '',
-    String dateOfBirth = '',
-    String gender = '',
+    String docFrontImage = '',
+    String docBackImage = '',
+    String selfieImage = '',
   }) {
     final body = '''
 {
-  "id": "${id}",
-  "first_name": "${firstName}",
-  "middle_name": "${middleName}",
-  "last_name": "${lastName}",
-  "date_of_birth": "${dateOfBirth}",
-  "gender": "${gender}"
+  "doc_front_image": "${docFrontImage}",
+  "doc_back_image": "${docBackImage}",
+  "selfie_image": "${selfieImage}"
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'KYC',
-      apiUrl:
-          'https://docs.appruve.co/appruve-identity/kenya/verify-kenya-national-id',
+      apiUrl: 'https://apps.faceki.com/kyc-verification',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization':
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2FwaS5hcHBydXZlLmNvIiwianRpIjoiNmE4ZTY1OGMtNjI3ZS00NDgwLWFkMDMtNTQ2YThhZDQyYTE0IiwiYXVkIjoiODYyNWFiNTUtNzExZS00YTllLTkxY2QtZmQzYWY0ODI0MDdkIiwic3ViIjoiYWM1NmNmYzEtYzhiNS00YTdlLWFlNzMtMmFkNDgzNjVhODA3IiwibmJmIjowLCJzY29wZXMiOlsidmVyaWZpY2F0aW9uX3ZpZXciLCJ2ZXJpZmljYXRpb25fbGlzdCIsInZlcmlmaWNhdGlvbl9kb2N1bWVudCIsInZlcmlmaWNhdGlvbl9pZGVudGl0eSJdLCJleHAiOjMyMzUzODYxOTUsImlhdCI6MTY1NzQ2Mjk5NX0.bUFNtvjqWVp2PSQuQzj_bnYZM404_32qvzt9G6O_le8',
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'authorization': 'Bearer b3755fb0-0816-11ed-a9a4-eb09c9fc8606',
       },
       params: {
-        'id': id,
-        'first_name': firstName,
-        'last_name': lastName,
-        'middle_name': middleName,
-        'date_of_birth': dateOfBirth,
-        'gender': gender,
+        'doc_front_image': docFrontImage,
+        'doc_back_image': docBackImage,
+        'selfie_image': selfieImage,
       },
       body: body,
       bodyType: BodyType.JSON,

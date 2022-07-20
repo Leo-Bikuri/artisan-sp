@@ -58,6 +58,13 @@ class _$RequestsRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
+    value = object.createdAt;
+    if (value != null) {
+      result
+        ..add('created_at')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(DateTime)));
+    }
     value = object.reference;
     if (value != null) {
       result
@@ -105,6 +112,10 @@ class _$RequestsRecordSerializer
           result.distance = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double;
           break;
+        case 'created_at':
+          result.createdAt = serializers.deserialize(value,
+              specifiedType: const FullType(DateTime)) as DateTime;
+          break;
         case 'Document__Reference__Field':
           result.reference = serializers.deserialize(value,
                   specifiedType: const FullType(
@@ -130,6 +141,8 @@ class _$RequestsRecord extends RequestsRecord {
   @override
   final double distance;
   @override
+  final DateTime createdAt;
+  @override
   final DocumentReference<Object> reference;
 
   factory _$RequestsRecord([void Function(RequestsRecordBuilder) updates]) =>
@@ -141,6 +154,7 @@ class _$RequestsRecord extends RequestsRecord {
       this.status,
       this.username,
       this.distance,
+      this.createdAt,
       this.reference})
       : super._();
 
@@ -161,6 +175,7 @@ class _$RequestsRecord extends RequestsRecord {
         status == other.status &&
         username == other.username &&
         distance == other.distance &&
+        createdAt == other.createdAt &&
         reference == other.reference;
   }
 
@@ -169,10 +184,12 @@ class _$RequestsRecord extends RequestsRecord {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, spId.hashCode), userId.hashCode),
-                    status.hashCode),
-                username.hashCode),
-            distance.hashCode),
+                $jc(
+                    $jc($jc($jc(0, spId.hashCode), userId.hashCode),
+                        status.hashCode),
+                    username.hashCode),
+                distance.hashCode),
+            createdAt.hashCode),
         reference.hashCode));
   }
 
@@ -184,6 +201,7 @@ class _$RequestsRecord extends RequestsRecord {
           ..add('status', status)
           ..add('username', username)
           ..add('distance', distance)
+          ..add('createdAt', createdAt)
           ..add('reference', reference))
         .toString();
   }
@@ -213,6 +231,10 @@ class RequestsRecordBuilder
   double get distance => _$this._distance;
   set distance(double distance) => _$this._distance = distance;
 
+  DateTime _createdAt;
+  DateTime get createdAt => _$this._createdAt;
+  set createdAt(DateTime createdAt) => _$this._createdAt = createdAt;
+
   DocumentReference<Object> _reference;
   DocumentReference<Object> get reference => _$this._reference;
   set reference(DocumentReference<Object> reference) =>
@@ -230,6 +252,7 @@ class RequestsRecordBuilder
       _status = $v.status;
       _username = $v.username;
       _distance = $v.distance;
+      _createdAt = $v.createdAt;
       _reference = $v.reference;
       _$v = null;
     }
@@ -256,6 +279,7 @@ class RequestsRecordBuilder
             status: status,
             username: username,
             distance: distance,
+            createdAt: createdAt,
             reference: reference);
     replace(_$result);
     return _$result;

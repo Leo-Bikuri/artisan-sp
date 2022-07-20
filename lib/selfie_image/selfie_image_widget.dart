@@ -91,160 +91,165 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                final selectedMedia = await selectMedia(
-                                  imageQuality: 100,
-                                  multiImage: false,
-                                );
-                                if (selectedMedia != null &&
-                                    selectedMedia.every((m) =>
-                                        validateFileFormat(
-                                            m.storagePath, context))) {
-                                  showUploadMessage(
-                                    context,
-                                    'Uploading file...',
-                                    showLoading: true,
+                          if ((uploadedFileUrl == null ||
+                              uploadedFileUrl == ''))
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  final selectedMedia = await selectMedia(
+                                    imageQuality: 100,
+                                    multiImage: false,
                                   );
-                                  final downloadUrls = (await Future.wait(
-                                          selectedMedia.map((m) async =>
-                                              await uploadData(
-                                                  m.storagePath, m.bytes))))
-                                      .where((u) => u != null)
-                                      .toList();
-                                  ScaffoldMessenger.of(context)
-                                      .hideCurrentSnackBar();
-                                  if (downloadUrls != null &&
-                                      downloadUrls.length ==
-                                          selectedMedia.length) {
-                                    setState(() =>
-                                        uploadedFileUrl = downloadUrls.first);
+                                  if (selectedMedia != null &&
+                                      selectedMedia.every((m) =>
+                                          validateFileFormat(
+                                              m.storagePath, context))) {
                                     showUploadMessage(
                                       context,
-                                      'Success!',
+                                      'Uploading file...',
+                                      showLoading: true,
                                     );
-                                  } else {
-                                    showUploadMessage(
+                                    final downloadUrls = (await Future.wait(
+                                            selectedMedia.map((m) async =>
+                                                await uploadData(
+                                                    m.storagePath, m.bytes))))
+                                        .where((u) => u != null)
+                                        .toList();
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+                                    if (downloadUrls != null &&
+                                        downloadUrls.length ==
+                                            selectedMedia.length) {
+                                      setState(() =>
+                                          uploadedFileUrl = downloadUrls.first);
+                                      showUploadMessage(
+                                        context,
+                                        'Success!',
+                                      );
+                                    } else {
+                                      showUploadMessage(
+                                        context,
+                                        'Failed to upload media',
+                                      );
+                                      return;
+                                    }
+                                  }
+
+                                  response = await KycCall.call(
+                                    docFrontImage: widget.front,
+                                    docBackImage: widget.back,
+                                    selfieImage: uploadedFileUrl,
+                                  );
+
+                                  setState(() {});
+                                },
+                                text: 'Click to add image',
+                                options: FFButtonOptions(
+                                  width: 180,
+                                  height: 40,
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryColor,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Lexend Deca',
+                                        color: FlutterFlowTheme.of(context)
+                                            .tertiaryColor,
+                                      ),
+                                  elevation: 2,
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .tertiaryColor,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          if ((uploadedFileUrl != null &&
+                              uploadedFileUrl != ''))
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  if (((response?.statusCode ?? 200)) == 200) {
+                                    final serviceProvidersUpdateData =
+                                        createServiceProvidersRecordData(
+                                      photoUrl: uploadedFileUrl,
+                                      available: true,
+                                    );
+                                    await currentUserReference
+                                        .update(serviceProvidersUpdateData);
+                                    await Navigator.pushAndRemoveUntil(
                                       context,
-                                      'Failed to upload media',
+                                      PageTransition(
+                                        type: PageTransitionType.leftToRight,
+                                        duration: Duration(milliseconds: 300),
+                                        reverseDuration:
+                                            Duration(milliseconds: 300),
+                                        child: Home2Widget(),
+                                      ),
+                                      (r) => false,
+                                    );
+                                    return;
+                                  } else {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (alertDialogContext) {
+                                        return AlertDialog(
+                                          title: Text('Failed'),
+                                          content: Text('Verification Failed'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(
+                                                  alertDialogContext),
+                                              child: Text('Ok'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                    await deleteUser(context);
+                                    await Navigator.pushAndRemoveUntil(
+                                      context,
+                                      PageTransition(
+                                        type: PageTransitionType.bottomToTop,
+                                        duration: Duration(milliseconds: 300),
+                                        reverseDuration:
+                                            Duration(milliseconds: 300),
+                                        child: LoginWidget(),
+                                      ),
+                                      (r) => false,
                                     );
                                     return;
                                   }
-                                }
-
-                                response = await KycCall.call(
-                                  docFrontImage: widget.front,
-                                  docBackImage: widget.back,
-                                  selfieImage: uploadedFileUrl,
-                                );
-
-                                setState(() {});
-                              },
-                              text: 'Click to add image',
-                              options: FFButtonOptions(
-                                width: 180,
-                                height: 40,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Lexend Deca',
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiaryColor,
-                                    ),
-                                elevation: 2,
-                                borderSide: BorderSide(
+                                },
+                                text: 'Finish',
+                                options: FFButtonOptions(
+                                  width: 180,
+                                  height: 40,
                                   color: FlutterFlowTheme.of(context)
-                                      .tertiaryColor,
-                                  width: 1,
+                                      .secondaryColor,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .subtitle2
+                                      .override(
+                                        fontFamily: 'Lexend Deca',
+                                        color: FlutterFlowTheme.of(context)
+                                            .tertiaryColor,
+                                      ),
+                                  elevation: 2,
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .tertiaryColor,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                if (((response?.statusCode ?? 200)) == 200) {
-                                  final serviceProvidersUpdateData =
-                                      createServiceProvidersRecordData(
-                                    photoUrl: uploadedFileUrl,
-                                    available: true,
-                                  );
-                                  await currentUserReference
-                                      .update(serviceProvidersUpdateData);
-                                  await Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.leftToRight,
-                                      duration: Duration(milliseconds: 300),
-                                      reverseDuration:
-                                          Duration(milliseconds: 300),
-                                      child: Home2Widget(),
-                                    ),
-                                    (r) => false,
-                                  );
-                                  return;
-                                } else {
-                                  await showDialog(
-                                    context: context,
-                                    builder: (alertDialogContext) {
-                                      return AlertDialog(
-                                        title: Text('Failed'),
-                                        content: Text('Verification Failed'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.pop(
-                                                alertDialogContext),
-                                            child: Text('Ok'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                  await Navigator.pushAndRemoveUntil(
-                                    context,
-                                    PageTransition(
-                                      type: PageTransitionType.bottomToTop,
-                                      duration: Duration(milliseconds: 300),
-                                      reverseDuration:
-                                          Duration(milliseconds: 300),
-                                      child: LoginWidget(),
-                                    ),
-                                    (r) => false,
-                                  );
-                                  return;
-                                }
-                              },
-                              text: 'Finish',
-                              options: FFButtonOptions(
-                                width: 180,
-                                height: 40,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryColor,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Lexend Deca',
-                                      color: FlutterFlowTheme.of(context)
-                                          .tertiaryColor,
-                                    ),
-                                elevation: 2,
-                                borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .tertiaryColor,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ],

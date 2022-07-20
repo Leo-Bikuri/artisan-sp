@@ -158,9 +158,8 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                   return 'Field is required';
                                 }
 
-                                if (!RegExp(kTextValidatorUsernameRegex)
-                                    .hasMatch(val)) {
-                                  return 'Must start with a letter and can only contain letters, digits and - or _.';
+                                if (!RegExp(r"^[A-Za-z]+$").hasMatch(val)) {
+                                  return 'Invalid text';
                                 }
                                 return null;
                               },
@@ -227,9 +226,8 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                   return 'Field is required';
                                 }
 
-                                if (!RegExp(kTextValidatorUsernameRegex)
-                                    .hasMatch(val)) {
-                                  return 'Must start with a letter and can only contain letters, digits and - or _.';
+                                if (!RegExp(r"^[A-Za-z]+$").hasMatch(val)) {
+                                  return 'Invalid text';
                                 }
                                 return null;
                               },
@@ -296,9 +294,8 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                   return 'Field is required';
                                 }
 
-                                if (!RegExp(kTextValidatorUsernameRegex)
-                                    .hasMatch(val)) {
-                                  return 'Must start with a letter and can only contain letters, digits and - or _.';
+                                if (!RegExp(r"^[A-Za-z]+$").hasMatch(val)) {
+                                  return 'Invalid text';
                                 }
                                 return null;
                               },
@@ -371,7 +368,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                   return 'Maximum 12 characters allowed, currently ${val.length}.';
                                 }
                                 if (!RegExp(
-                                        r"^254(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$")
+                                        r"^(254)(7(?:(?:[129][0-9])|(?:0[0-8])|(4[0-1]))[0-9]{6})$")
                                     .hasMatch(val)) {
                                   return 'Invalid text';
                                 }

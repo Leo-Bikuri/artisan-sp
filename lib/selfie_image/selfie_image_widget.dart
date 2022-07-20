@@ -208,7 +208,6 @@ class _SelfieImageWidgetState extends State<SelfieImageWidget> {
                                       );
                                     },
                                   );
-                                  await currentUserReference.delete();
                                   await Navigator.pushAndRemoveUntil(
                                     context,
                                     PageTransition(

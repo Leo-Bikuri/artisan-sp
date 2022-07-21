@@ -603,6 +603,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                   identificationNumber:
                                       identificationNumberController.text,
                                   photoUrl: uploadedFileUrl,
+                                  available: true,
                                 );
                                 await currentUserReference
                                     .update(serviceProvidersUpdateData);

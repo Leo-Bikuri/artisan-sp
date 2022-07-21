@@ -1,11 +1,13 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
+import '../backend/firebase_storage/storage.dart';
 import '../flutter_flow/flutter_flow_drop_down.dart';
 import '../flutter_flow/flutter_flow_place_picker.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/place.dart';
+import '../flutter_flow/upload_media.dart';
 import '../home2/home2_widget.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,12 +29,13 @@ class CompleteProfileWidget extends StatefulWidget {
 }
 
 class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
-  String dropDownValue;
-  TextEditingController firstNameController;
+  String uploadedFileUrl = '';
   TextEditingController identificationNumberController;
+  TextEditingController firstNameController;
   TextEditingController middleNameController;
   TextEditingController lastNameController;
   TextEditingController phoneNumberController;
+  String dropDownValue;
   var placePickerValue = FFPlace();
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -97,6 +100,71 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                             child: Text(
                               'Additional Details',
                               style: FlutterFlowTheme.of(context).title1,
+                            ),
+                          ),
+                          Align(
+                            alignment: AlignmentDirectional(0, 0),
+                            child: Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 20, 0, 10),
+                              child: InkWell(
+                                onTap: () async {
+                                  final selectedMedia = await selectMedia(
+                                    maxWidth: 1000.00,
+                                    maxHeight: 1000.00,
+                                    mediaSource: MediaSource.photoGallery,
+                                    multiImage: false,
+                                  );
+                                  if (selectedMedia != null &&
+                                      selectedMedia.every((m) =>
+                                          validateFileFormat(
+                                              m.storagePath, context))) {
+                                    showUploadMessage(
+                                      context,
+                                      'Uploading file...',
+                                      showLoading: true,
+                                    );
+                                    final downloadUrls = (await Future.wait(
+                                            selectedMedia.map((m) async =>
+                                                await uploadData(
+                                                    m.storagePath, m.bytes))))
+                                        .where((u) => u != null)
+                                        .toList();
+                                    ScaffoldMessenger.of(context)
+                                        .hideCurrentSnackBar();
+                                    if (downloadUrls != null &&
+                                        downloadUrls.length ==
+                                            selectedMedia.length) {
+                                      setState(() =>
+                                          uploadedFileUrl = downloadUrls.first);
+                                      showUploadMessage(
+                                        context,
+                                        'Success!',
+                                      );
+                                    } else {
+                                      showUploadMessage(
+                                        context,
+                                        'Failed to upload media',
+                                      );
+                                      return;
+                                    }
+                                  }
+                                },
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Image.network(
+                                    valueOrDefault<String>(
+                                      uploadedFileUrl,
+                                      'https://firebasestorage.googleapis.com/v0/b/artisan-8a1a5.appspot.com/o/3424914331553668332-128.png?alt=media&token=f9212332-f647-4dff-9b2b-44669ae40949',
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           Padding(
@@ -529,11 +597,12 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     createServiceProvidersRecordData(
                                   phoneNumber: phoneNumberController.text,
                                   displayName:
-                                      '${identificationNumberController.text} ${lastNameController.text}',
+                                      '${firstNameController.text} ${lastNameController.text}',
                                   skill: dropDownValue,
                                   location: placePickerValue.latLng,
                                   identificationNumber:
                                       identificationNumberController.text,
+                                  photoUrl: uploadedFileUrl,
                                 );
                                 await currentUserReference
                                     .update(serviceProvidersUpdateData);

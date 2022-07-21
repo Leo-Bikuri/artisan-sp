@@ -328,7 +328,7 @@ class _RequestWidgetState extends State<RequestWidget> {
                               onTap: () async {
                                 final requestsUpdateData =
                                     createRequestsRecordData(
-                                  status: 'Cancelled',
+                                  status: 'cancelled',
                                 );
                                 await requestRequestsRecord.reference
                                     .update(requestsUpdateData);

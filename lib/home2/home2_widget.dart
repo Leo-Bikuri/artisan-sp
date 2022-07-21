@@ -68,8 +68,9 @@ class _Home2WidgetState extends State<Home2Widget> {
     }
     return StreamBuilder<List<RequestsRecord>>(
       stream: queryRequestsRecord(
-        queryBuilder: (requestsRecord) =>
-            requestsRecord.where('spId', isEqualTo: currentUserReference),
+        queryBuilder: (requestsRecord) => requestsRecord
+            .where('spId', isEqualTo: currentUserReference)
+            .where('status', isEqualTo: 'pending'),
         singleRecord: true,
       ),
       builder: (context, snapshot) {

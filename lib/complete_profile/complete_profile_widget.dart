@@ -6,7 +6,7 @@ import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/place.dart';
-import '../front_id/front_id_widget.dart';
+import '../home2/home2_widget.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +29,7 @@ class CompleteProfileWidget extends StatefulWidget {
 class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
   String dropDownValue;
   TextEditingController firstNameController;
+  TextEditingController identificationNumberController;
   TextEditingController middleNameController;
   TextEditingController lastNameController;
   TextEditingController phoneNumberController;
@@ -40,6 +41,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
   void initState() {
     super.initState();
     firstNameController = TextEditingController();
+    identificationNumberController = TextEditingController();
     middleNameController = TextEditingController();
     lastNameController = TextEditingController();
     phoneNumberController = TextEditingController();
@@ -101,6 +103,79 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
                             child: TextFormField(
+                              controller: identificationNumberController,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelText: 'Identification Number',
+                                labelStyle: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Lexend Deca',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                hintText: 'Enter your identification number',
+                                hintStyle: FlutterFlowTheme.of(context)
+                                    .bodyText1
+                                    .override(
+                                      fontFamily: 'Lexend Deca',
+                                      color: Color(0xFF696969),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(50),
+                                ),
+                                filled: true,
+                                fillColor:
+                                    FlutterFlowTheme.of(context).secondaryColor,
+                                contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                    20, 24, 20, 24),
+                              ),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Lexend Deca',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                              keyboardType: TextInputType.number,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Field is required';
+                                }
+                                if (val.length < 8) {
+                                  return 'Requires at least 8 characters.';
+                                }
+                                if (val.length > 8) {
+                                  return 'Maximum 8 characters allowed, currently ${val.length}.';
+                                }
+                                if (!RegExp(r"^[0-9]{1,9}$").hasMatch(val)) {
+                                  return 'Invalid text';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(20, 20, 20, 0),
+                            child: TextFormField(
                               controller: firstNameController,
                               obscureText: false,
                               decoration: InputDecoration(
@@ -153,16 +228,6 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     fontWeight: FontWeight.normal,
                                   ),
                               keyboardType: TextInputType.name,
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'Field is required';
-                                }
-
-                                if (!RegExp(r"^[A-Za-z]+$").hasMatch(val)) {
-                                  return 'Invalid text';
-                                }
-                                return null;
-                              },
                             ),
                           ),
                           Padding(
@@ -464,21 +529,24 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     createServiceProvidersRecordData(
                                   phoneNumber: phoneNumberController.text,
                                   displayName:
-                                      '${firstNameController.text} ${lastNameController.text}',
+                                      '${identificationNumberController.text} ${lastNameController.text}',
                                   skill: dropDownValue,
                                   location: placePickerValue.latLng,
+                                  identificationNumber:
+                                      identificationNumberController.text,
                                 );
                                 await currentUserReference
                                     .update(serviceProvidersUpdateData);
-                                await Navigator.push(
+                                await Navigator.pushAndRemoveUntil(
                                   context,
                                   PageTransition(
                                     type: PageTransitionType.bottomToTop,
                                     duration: Duration(milliseconds: 300),
                                     reverseDuration:
                                         Duration(milliseconds: 300),
-                                    child: FrontIdWidget(),
+                                    child: Home2Widget(),
                                   ),
+                                  (r) => false,
                                 );
                               },
                               text: 'Continue',
